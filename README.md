@@ -1,22 +1,42 @@
 # MATLAB Grid Pathfinding
 
-Generate an obstacle map, pick a start and goal, and watch a route travel across the grid. The GUI uses breadth-first search (BFS) with one-cell moves in four directions. A separate demo compares BFS with A* on a fixed map.
+An interactive route planner for exploring how a robot can navigate an obstacle grid. Create a map, choose a start and goal, and watch the robot follow a route cell by cell.
 
-![BFS and A* return the same route, with many more expanded cells shaded for BFS](docs/screenshots/bfs-vs-astar.png)
+## Motivation and goal
 
-Both searches found the same 30-move route on this map. BFS processed 226 cells and A* processed 40. The blue shading shows the cells each search processed, while the red line shows the route it returned. A* uses Manhattan distance and breaks ties by preferring cells closer to the goal.
+A route drawn on a map tells you where to go, but it hides the work the planner did to find it. This project makes both visible. The goal was to build a complete planning workflow, from generating an obstacle map to animating a route, and to see how the choice of search algorithm affects the work needed to find a shortest path.
 
-## Run it
+## What the project achieved
 
-Open the project folder in MATLAB. The project was run with MATLAB R2025a.
+- Built a MATLAB GUI for generating obstacle maps, validating endpoints, and finding shortest routes with breadth-first search (BFS).
+- Added routes through random reachable checkpoints, route selection, CSV export, and animation. A checkpoint can produce a detour or repeat the original route.
+- Demonstrated an unreachable goal on a map where obstacles trapped the start.
+- Compared BFS and A* on the same fixed map with the same four-direction movement rules.
 
-1. Run `PathTestWithAlternates` to open the GUI.
-2. Set the grid size and obstacle density, then click **Generate Map**.
-3. Enter start and goal coordinates as `x,y` and click **Plot Start / End**. Choose free cells for both endpoints.
-4. Click **Find Path** to draw the shortest route.
-5. Click **Generate Alternative Path** to try a route through a random reachable checkpoint. Use **Select Path** to choose a route, then click **Start Simulation** to animate it. The most recently generated alternative is exported to `alternativePath.csv`.
+![BFS and A* find the same route, with more expanded cells shaded for BFS](docs/screenshots/bfs-vs-astar.png)
 
-Run `compareSearches` for the fixed-map comparison pictured above.
+| Search | Route length | Cells expanded |
+| --- | ---: | ---: |
+| BFS | 30 moves | 226 |
+| A* | 30 moves | 40 |
+
+Both searches returned the same shortest route in this example. The red line shows the final route and the blue shading shows the cells each search processed. A* uses Manhattan distance and breaks ties by favoring cells closer to the goal.
+
+## How to run it
+
+Clone or download the repository and open it in MATLAB. The project was tested with MATLAB R2025a. From the repository root, run these commands in the MATLAB Command Window.
+
+```matlab
+cd code
+PathTestWithAlternates
+```
+
+1. Set the grid size and obstacle density, then click **Generate Map**.
+2. Enter the start and goal as `x,y` coordinates on free cells, then click **Plot Start / End**.
+3. Click **Find Path** to draw the shortest route.
+4. To try a checkpoint route, click **Generate Alternative Path**. Use **Select Path** to choose a route and click **Start Simulation** to animate it. The latest checkpoint route is saved as `alternativePath.csv` in MATLAB’s current folder.
+
+To reproduce the BFS and A* figure, run `compareSearches` from the same `code/` folder. It opens a separate figure and prints both search counts in the Command Window.
 
 ## Example runs
 
